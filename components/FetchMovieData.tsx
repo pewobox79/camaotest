@@ -1,12 +1,18 @@
 import React, {useState, useEffect} from 'react';
-import Articles from'./Articles'
+import Articles from './Articles'
+import SearchField from './SearchField';
+import ProgressBar from './ProgressBar';
+import Box from '@mui/material/Box';
+import Paginition from './Paginition';
 
 export default function FetchMovieData() {
 
     const [newsData, setNewsData] = useState();
+    const [searchTerm, setSearchTerm] = useState();
+    const [pageNumber, setPageNumber] = useState(1)
 
     useEffect(() => {
-        fetch("https://free-news.p.rapidapi.com/v1/search?q=Elon%20Musk&lang=en&page=1", {
+        fetch(`https://free-news.p.rapidapi.com/v1/search?q=${searchTerm}&lang=en&page=${pageNumber}`, {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "free-news.p.rapidapi.com",
@@ -23,20 +29,32 @@ export default function FetchMovieData() {
             .catch(err => {
                 console.error(err);
             })
-    }, []);
+    }, [searchTerm, pageNumber]);
 
+    console.log(newsData)
+    if (!newsData) {
+
+        return (<ProgressBar/>)
+
+    }
     // @ts-ignore
-    const ListOfArticle = newsData.map((article)=> <Articles title={article.title} key={article.id}/>)
-
+    const ListOfArticle = newsData.map((article) => <Articles title={article.title} key={article.id} source={article.clean_url} summary={article.summary} date={article.published_date} author={article.author}/>)
+    // @ts-ignore
     return (
-        <section>
-        <div>
+        <>
+        <Box sx={{display: "flex", justifyContent: "center", alignItems: 'center'}}>
+            <section style={{marginLeft: "auto", marginRight: "auto"}}>
+                <SearchField setSearchTerm={setSearchTerm}/>
+                <Paginition setPageNumber={setPageNumber} pageNumber={pageNumber}/>
+                <ul>
+                    {ListOfArticle}
+                </ul>
+            </section>
 
+            <section>
 
-        </div>
-        <ul>
-        {ListOfArticle}
-        </ul>
-        </section>
+            </section>
+        </Box>
+            </>
     )
 }
