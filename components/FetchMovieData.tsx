@@ -4,6 +4,7 @@ import SearchField from './SearchField';
 import ProgressBar from './ProgressBar';
 import Box from '@mui/material/Box';
 import Paginition from './Paginition';
+import Weather from '../components/buttons/Weather'
 
 export default function FetchMovieData() {
 
@@ -42,6 +43,7 @@ export default function FetchMovieData() {
     // @ts-ignore
     return (
         <>
+
         <Box sx={{display: "flex", justifyContent: "center", alignItems: 'center'}}>
             <section style={{marginLeft: "auto", marginRight: "auto"}}>
                 <SearchField setSearchTerm={setSearchTerm}/>
